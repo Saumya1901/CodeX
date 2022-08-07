@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Editor</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
+  </link>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js">
+  </script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/mode/javascript/javascript.min.js">
+    </script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="codemirror/codemirror-5.65.7/lib/codemirror.css">
+  <script src="codemirror/codemirror-5.65.7/lib/codemirror.js"></script>
+  <link rel="stylesheet" href="codemirror/codemirror-5.65.7/theme/dracula.css">
+  <script type="text/javascript" src="script.js"></script>
+  <script src="codemirror/codemirror-5.65.7/mode/xml/xml.js"></script>
+  <script src="codemirror/codemirror-5.65.7/mode/css/css.js"></script>
+  <script src="codemirror/codemirror-5.65.7/mode/javascript/javascript.js"></script>
+
+</head>
+
+<body>
+  <div class="head">
+    <a href="./index.html">
+      <h2>Code <span style="color: greenyellow;">X</span> </h2>
+    </a>
+    <div class="buttons_head">
+
+      <button id="save_code" class="s_code">Save</button>
+      <a href="./projects.html"><button id="my_projects" class="s_code">My Projects</button></a>
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="main">
+      <div class="buttons">
+        <button id="btn_html">HTML</button>
+        <button id="btn_css">CSS</button>
+        <button id="btn_js">JS</button>
+      </div>
+      <div class="code">
+        <div class="html-code" id="html_code">
+          <p id="lable_html">HTML</p>
+        </div>
+        <div class="css-code" id="css_code">
+          <p id="lable_css">CSS</p>
+        </div>
+        <div class="js-code" id="js_code">
+          <p id="lable_js">JS</p>
+        </div>
+      </div>
+    </div>
+    <div class="frame">
+      <p>OUTPUT</p>
+      <iframe id="code"></iframe>
+    </div>
+  </div>
+  <script>
+    var btn = document.getElementById("save_code");
+    btn.addEventListener("click", function () {
+      saveToServer(localStorage.getItem("code_html"), localStorage.getItem("code_css"), localStorage.getItem("code_js"));
+    });
+
+
+
+
+
+  </script>
+  <script>
+
+
+    function saveToServer(html, css, js) {
+      let data = {
+        code: {
+          html: html,
+          css: css,
+          js: js
+        }
+      };
+
+      localStorage.setItem("code_html", JSON.stringify(html));
+      localStorage.setItem("code_css", JSON.stringify(css));
+      localStorage.setItem("code_js", JSON.stringify(js));
+
+      var settings = {
+        url:
+          "http://localhost/code/api?action=addCodeFile&uid=" + localStorage.getItem("uid") +
+          "&data=" + JSON.stringify(data),
+        method: "POST",
+        timeout: 0,
+        mode: "nocors"
+      };
+
+      $.ajax(settings).done(function (response) {
+        console.log(response);
+      });
+    }
+  </script>
+</body>
+
+</html>
